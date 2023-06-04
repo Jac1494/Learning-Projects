@@ -1,5 +1,0 @@
-1)The high-level design of the code generator
-
-https://llvm.org/docs/CodeGenerator.html#machine-code-representation
-
-

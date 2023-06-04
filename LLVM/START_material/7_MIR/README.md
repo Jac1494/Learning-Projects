@@ -1,1 +1,0 @@
-- 2017 LLVM Developers’ Meeting- M. Braun “Welcome to the back-end- The LLVM machine representation”
