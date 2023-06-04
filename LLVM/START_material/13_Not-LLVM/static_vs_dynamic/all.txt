@@ -1,0 +1,78 @@
+dynamic:-
+--------
+jaydeep@bft:~/temp/dynamic$ cat sum.c
+int sum(int x,int y)
+{
+   return x+y;
+}
+jaydeep@bft:~/temp/dynamic$ cat test.c
+#include<stdio.h>
+
+int main()
+{
+   printf("%d\n",sum(11,22));
+   return 0;
+}
+jaydeep@bft:~/temp/dynamic$ clang -c -Wall -Werror -fPIC sum.c && clang -shared -o libsum.so sum.o
+jaydeep@bft:~/temp/dynamic$ clang -c test.c -o test.o
+test.c:5:18: warning: implicit declaration of function 'sum' is invalid in C99 [-Wimplicit-function-declaration]
+   printf("%d\n",sum(11,22));
+                 ^
+1 warning generated.
+jaydeep@bft:~/temp/dynamic$ clang -o test test.o -L. -lsum
+jaydeep@bft:~/temp/dynamic$ ./test
+33
+jaydeep@bft:~/temp/dynamic$ vi sum.c
+jaydeep@bft:~/temp/dynamic$ cat sum.c
+int sum(int x,int y)
+{
+   return x+y-20;
+}
+jaydeep@bft:~/temp/dynamic$ clang -c -Wall -Werror -fPIC sum.c && clang -shared -o libsum.so sum.o
+jaydeep@bft:~/temp/dynamic$ ./test
+13
+
+static:-
+--------
+jaydeep@bft:~/temp/static$ cat sum.c
+int sum(int x,int y)
+{
+   return x+y;
+}
+jaydeep@bft:~/temp/static$ cat test.c
+#include<stdio.h>
+
+int main()
+{
+   printf("%d\n",sum(11,22));
+   return 0;
+}
+jaydeep@bft:~/temp/static$ clang -c -o sum.o sum.c && ar rcs libsum.a sum.o
+jaydeep@bft:~/temp/static$ clang -c test.c -o test.o
+test.c:5:18: warning: implicit declaration of function 'sum' is invalid in C99 [-Wimplicit-function-declaration]
+   printf("%d\n",sum(11,22));
+                 ^
+1 warning generated.
+jaydeep@bft:~/temp/static$ clang -o test test.o -L. -lsum
+jaydeep@bft:~/temp/static$ ./test
+33
+jaydeep@bft:~/temp/static$ vi sum.c
+jaydeep@bft:~/temp/static$ cat sum.c
+int sum(int x,int y)
+{
+   return x+y-20;
+}
+jaydeep@bft:~/temp/static$ clang -c -o sum.o sum.c && ar rcs libsum.a sum.o
+jaydeep@bft:~/temp/static$ ./test
+33
+jaydeep@bft:~/temp/static$ clang -c test.c -o test.o
+test.c:5:18: warning: implicit declaration of function 'sum' is invalid in C99 [-Wimplicit-function-declaration]
+   printf("%d\n",sum(11,22));
+                 ^
+1 warning generated.
+jaydeep@bft:~/temp/static$ ./test
+33
+jaydeep@bft:~/temp/static$ clang -o test test.o -L. -lsum
+jaydeep@bft:~/temp/static$ ./test
+13
+jaydeep@bft:~/temp/static$

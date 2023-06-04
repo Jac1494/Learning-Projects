@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Node
+{
+	int value;
+	struct Node *next;
+
+}NODE;
+
+void print(NODE *hptr)
+{
+	printf("PRINT ::");
+
+	while(hptr)
+	{
+		printf("%d\n", hptr->value);
+		hptr = hptr->next;	
+	}
+
+}
+void add_end(NODE **hptr, int value)
+{
+	if(*hptr == NULL){
+		*hptr = calloc(1, sizeof(NODE));
+		if(*hptr == NULL){
+			printf("MEMORY IS NOT ALLOCATED\n");
+			exit(0);
+		}
+		//printf("ENTER INTO FIRST TIME ::%u\n",*hptr);
+		(*hptr)->value = value;
+		(*hptr)->next = NULL;
+	}else{
+	
+		NODE *newNode = calloc(1, sizeof(NODE));
+		if(newNode == NULL){
+			printf("MEMORY IS NOT ALLOCATED\n");
+			exit(0);
+		}
+		NODE *tmpNode = *hptr;
+		NODE *currentNode  = NULL;
+		while(tmpNode){
+			currentNode = tmpNode;
+			tmpNode = tmpNode->next; 
+		}
+		
+		currentNode->next = newNode;
+		newNode->next = NULL;
+		newNode->value = value;
+	}
+}
+
+void freeMemory(NODE *hptr)
+{
+
+	NODE *tmpNode;
+	while(hptr)
+	{
+	    tmpNode = hptr;
+		hptr = hptr->next;
+		free(tmpNode);
+	}
+
+}
+
+void reverse_link(NODE **hptr)
+{
+/*
+- We are reversing link and creating new link at q node.
+- At last we will update hptr with q.
+
+*/
+	
+	NODE *p =  *hptr;
+	NODE *q = NULL;
+	NODE *r;
+/*
+Example:-    A B C => link list
+		p           q            r
+		A           NULL         
+After 1 loop	B           A| NULL	 NULL
+After 2 loop    C	    B| A	 A 
+After 3 loop    NULL	    C| B| A	 B
+*/
+	p = *hptr;
+	
+	
+	while(p)
+	{
+		r = q;
+		q = p;
+		p = p->next;
+		q->next = r;
+	}
+
+	*hptr = q;
+}
+
+int main()
+{
+	
+	NODE *hptr = NULL;
+	int value = 0;
+	char ch;
+	do {
+		printf("ENTER VALUE ::");
+		scanf("%d", &value);
+		add_end(&hptr, value);
+		printf("DO U WANT TO ADD ONE MORE ELEMENT TYPE(Y/y)::");
+		scanf(" %c", &ch);
+		printf("\n");
+	}while(ch == 'Y' || ch == 'y');		
+
+	printf("BEFORE REVERSE LINK ::\n");
+	print(hptr);
+	reverse_link(&hptr);
+	printf("AFTER REVERSE LINK ::\n");
+	print(hptr);
+    freeMemory(hptr);
+}

@@ -1,0 +1,62 @@
+
+LLVM toolchain build:
+---------------------
+ mkdir install
+ cd install/
+ export ins=`pwd`
+ mkdir build && cd ../build
+
+ cmake -DLLVM_ENABLE_PROJECTS="clang;compiler-rt;libcxx;libcxxabi;libunwind;"  -DCMAKE_INSTALL_PREFIX=$ins -DCMAKE_BUILD_TYPE=Debug ../llvm/
+
+ For debug 
+ /home/bft/Jaydeep/llvm-project/build1/bin/clang++ check.cpp -I boost_1_70_0 -O2 -mllvm -print-after-all -save-stats=cwd &>dump
+ -> '-mllvm --help-hidden' to see all the options.
+ -> clang  -mllvm -filter-print-funcs=_Z3foov -mllvm -print-after-all to print only one function
+ ->  ./clang -mllvm -debug-pass=Arguments p1.c to check whcih pass is applied to p1.c
+
+
+cmake -G Ninja -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Debug -DLLVM_ENABLE_ASSERTIONS=On -DCMAKE_C_COMPILER=$(which clang) -DCMAKE_CXX_COMPILER=$(which clang++) -DLLVM_TARGETS_TO_BUILD="AArch64" -DBUILD_SHARED_LIBS=On -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_LINKER=lld ../llvm
+
+build clang with built clang sourcce:
+====================================
+cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=$(which clang) -DCMAKE_CXX_COMPILER=$(which clang++) -DLLVM_TARGETS_TO_BUILD="X86" -DBUILD_SHARED_LIBS=On -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_CXX_FLAGS="-fstandalone-debug"   -DCMAKE_C_FLAGS="-fstandalone-debug"  -DCMAKE_INSTALL_PREFIX=/home/bft/Jaydeep/llvm-project/install_nofix_final ../llvm
+Debug:-
+======
+if breakpoint is not work than use (set follow-fork-mode child)
+to set child(means gcc->cc1)
+
+Which pass is applied it will give name of that:-
+===============================================
+-mllvm  -debug-pass=Arguments (llvm)
+
+give executed pass in sequential order:-
+======================================
+./llc p1.ll -debug-pass=Structure 
+
+NOTE:-
+=====
+If you pass -O0 to clang, most functions will be tagged with an optnone function attribute that will prevent opt and llc even if you pass -O3 to opt and llc. 
+
+remove optnone from inputfile(try.ll) or run clang with (-Xclang -disable-O0-optnone)
+./clang try.c -S -g -emit-llvm -Xclang -disable-O0-optnone
+./opt try.ll -mem2reg -simplifycfg --dce --constprop -S &>new.ll
+
+Execute step by step:-
+====================
+./clang try.c -O0 -Xclang -disable-llvm-passes -c -emit-llvm -o try.bc
+./opt try.bc -O3 -o try_opt.bc
+./llc -O3 -filetype=obj try_opt.bc -o try.o
+./clang try.o -o try.out
+./try.out
+ 
+
+Check frontend part using 
+clang p1.c -Xclang -ast-dump
+
+LLVM codereview:
+===============
+ git diff -U999999 >  mypatch.patch
+ -go to phabricator 
+ -go to https://reviews.llvm.org/differential/
+ -right side "create Diff"
+ - add patch continue..

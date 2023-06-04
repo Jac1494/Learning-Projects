@@ -1,0 +1,29 @@
+#include<stdio.h>
+#include<setjmp.h>
+jmp_buf buf;
+void func()
+{
+    printf("Welcome\n");
+
+    longjmp(buf, 0);
+
+    printf("Geek2\n");
+}
+
+int main()
+{ 
+    int r;
+  
+    if (r=setjmp(buf))
+    {
+        printf("r2=%d\n",r);
+        printf("Hello\n");
+    }
+    else
+    {
+        printf("r1=%d\n",r);
+        printf("World\n");
+        func();
+    }
+     return 0;
+}

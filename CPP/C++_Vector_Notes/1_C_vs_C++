@@ -1,0 +1,47 @@
+
+- Author of c++ is B'jarne stroustrup.
+
+- C is introduced for system program. Where C++ system and Application program and more efficient.
+		
+- C++ is follow object oriented prorgamming but it is not pure OOP language like java and others, Because
+  main function, global variable , friend function.etc.(Not avaialble in OOPS)
+
+- C++ standard's are  used like below
+	c++1x == c++11 , c++1y == c++14 , c++1z == c++17 , c++2a == c++20
+	
+ ---------------------------------------------
+ 		 C Language   	              
+ ---------------------------------------------
+ 1. Procedual language				          
+ 2. Data is not securied			          
+ 3. C is function driven and it is building   
+    blocks of C program.				      
+ 4. C don't supports OOPS feature		      
+ 5. C is don't follow strict type checking    
+ 6. Structure inside structure is not 	      
+ 	 possible. 								  
+ 7. Namespace is not present		          
+ 8. Reference variable is not allows          
+ 9. Malloc, calloc, realloc, free functions   
+ 	 used for dynamic memory allocation 		
+10. Don't support exception handling			
+11. Don't support templates.                  
+ ---------------------------------------------									          
+       	      C++  language  			      
+ ---------------------------------------------
+ 1. Procedual and Object oriented language		
+ 2. Data is securied(Exa. Private)		      
+ 3. C++ is object driven. Objects are  		  
+    building blocks for C++ program. 			
+ 4. C++ supports OOPS feature 		  			
+ 5. C++ is follow strict type checking			
+ 6. Structure inside structure is structure	  
+ 	 possible.								  
+ 7. Namespace is present 						
+ 8. Reference variable is allows   			  
+ 9. new and delete operator are used for 		
+ 	 dynamic memory allocation					
+10. Do support exception handling           	
+11. Do support templates. 			  			
+ 									  			
+ ---------------------------------------------

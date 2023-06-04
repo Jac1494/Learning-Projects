@@ -1,0 +1,40 @@
+1) To check if this is valid IR: 
+   opt –verify input.ll
+
+2)The optimizer can generate the CFG in dot format:
+opt –analyze –dot-cfg-only<input.ll>
+-dot-cfg-only = Generate .dot files. Don’t include instructions.   
+
+3)The optimizer can generate the CFG in dot format:
+opt –analyze –dot-cfg<input.ll>
+-dot-cfg= Generate .dot files.
+
+4)Generating LLVM IR with Clang:
+$ clang -O2 -g0 -Xclang -disable-llvm-optzns -emit-llvm -S -o x.ll x.cc
+Running the mid-level optimizers:
+$ opt -O3 -S -o x.opt.ll x.ll -print-after-all
+Running the code generator: (“apt-get install xdot” to view DAGs)
+$ llc -filetype=asm -o x.s x.opt.ll -view-isel-dags -print-after-all
+Running the assembler:
+$ llvm-mc -filetype=obj -o x.o x.s
+Looking at the object file:
+$ objdump -dr x.o
+
+5)backend sequence
+llc -view-dag-combine1-dags
+before instruction selection 
+llc -view-isel-dags 
+after instruction selection 
+llc -view-sched-dags
+scheduing and emit machine instruction 
+llc -print-machininstrs test.ll > outfile  2>&1
+
+machine insr
+llc -view-sunit-dags
+and 
+llc -debug 
+
+int foo ( int aa , int bb , int cc ) {
+int sum = aa + bb ;
+return sum / cc ;
+}

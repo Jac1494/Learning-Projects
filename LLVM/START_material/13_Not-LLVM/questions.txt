@@ -1,0 +1,202 @@
+1). difference in llvm and gcc?
+Which is better -> In llvm if we not tell compiler that than it will not create interminddiate file. it will direct create executable(MIR addPassesToEmitFile ,addPassesToEmitMC)
+
+https://medium.com/@alitech_2017/gcc-vs-clang-llvm-an-in-depth-comparison-of-c-c-compilers-899ede2be378
+GccVsLLVM read that.
+
+-GNU Compiler Collection (GCC), and Clang/Low Level Virtual Machine(LLVM)
+
+-From the benchmarking tests above, we can see that Clang offers more advantages
+for the construction of large projects while GCC is always advantageous in
+performance optimization. The bla depends on your specific application
+
+GCC:-
+-GCC is a program language compiler developed by GNU. It is a set of free software
+released under the GNU General Public License (GPL) and GNU Lesser General
+Public License (LGPL)
+-GCC supports more traditional languages than Clang and LLVM, such as Ada,
+Fortran, and Go
+-GCC supports more less-popular architectures, and supported RISC-V earlier
+than Clang and LLVM
+-GCC supports more language extensions and more assembly language features
+than Clang and LLVM. GCC is still the only option for compiling the Linux kernel.
+Although research on kernel compilation by using Clang and LLVM is also
+reported in the industry, the kernel cannot be compiled without modifying the
+source code and compilation parameters.
+
+LLVM:-
+- The LLVM license is changed from UIUC License to Apache 2.0 License with LLVM
+exceptions. It is mainly used to solve the problem that the LLVM runtime librar y is
+based on MIT License and the patent authorization required for the project is too
+extensive. Under this license, LLVM allows anyone to derive commercial products
+from LLVM without any restrictions, and does not require that any derivatives
+provide open source code, thus promoting the extensive use of LLVM
+- LLVM frameworks, such as Swift, Rust, Julia,and Ruby
+- Clang provides additional useful tools, such as scan-build and clang static
+analyzer for static analysis, clang-format and clang-tidy for syntax analysis, as
+well as the editor plug-in Clangd
+
+
+2). What is vxworks? 
+->VxWorks is a real-time operating system (RTOS) that can be used in embedded systems. VxWorks can be customized easily and can run on most processors designed for distributed computing. VxWorks is used to control network and communication devices, test and measurement equipment, computer peripherals, automotive systems, avionics (aeronautics and astronautics) equipment and diverse consumer products.
+
+- VxWorks has some similarities to Unix and includes a shell, debugging functions, memory management, performance monitoring and support for multiprocessing. The OS includes a kernel for preemptive multitasking, interrupt response, interprocess communication and a file system. Programming in VxWorks can be difficult for novices because the programmer must write the code on an as-needed basis. However, the fact that there is minimal content to save and restore means that VxWorks uses less processing power than Unix, so it can run faster.
+
+- VxWorks is a trademark of Wind River Systems, a company specializing in software optimization
+https://www.robomart.com/blog/real-time-operating-system-rtos/
+
+3). What's static single assignment?
+->"The 'phi' instruction is used to implement the φ node in the SSA graph representing the function."
+Read pdf ssa-intro-construct ,wikipedia and use-def and def-use
+https://nptel.ac.in/courses/106/108/106108113/
+
+4). Why to use volatile keyword in c?
+->  “volatile variable –> don’t do complier optimization for that variable“!
+
+Consider this code,
+int some_int = 100;
+while(some_int == 100)
+{
+   //your code
+}
+When this program gets compiled, the compiler may optimize this code, if it finds that the program never ever makes any attempt to change the value of some_int, so it may be tempted to optimize the while loop by changing it from while(some_int == 100) to something which is equivalent to while(true) so that the execution could be fast (since the condition in while loop appears to be true always). (if the compiler doesn't optimize it, then it has to fetch the value of some_int and compare it with 100, in each iteration which obviously is a little bit slow.)
+
+However, sometimes, optimization (of some parts of your program) may be undesirable, because it may be that someone else is changing the value of some_int from outside the program which compiler is not aware of, since it can't see it; but it's how you've designed it. In that case, compiler's optimization would not produce the desired result!
+
+So, to ensure the desired result, you need to somehow stop the compiler from optimizing the while loop. That is where the volatile keyword plays its role. All you need to do is this,
+
+volatile int some_int = 100; //note the 'volatile' qualifier now!
+In other words, I would explain this as follows:
+
+volatile tells the compiler that,
+
+"Hey compiler, I'm volatile and, you know, I can be changed by some XYZ that you're not even aware of. That XYZ could be anything. Maybe some alien outside this planet called program. Maybe some lightning, some form of interrupt, volcanoes, etc can mutate me. Maybe. You never know who is going to change me! So O you ignorant, stop playing an all-knowing god, and don't dare touch the code where I'm present. Okay?"
+
+Well, that is how volatile prevents the compiler from optimizing code. Now search the web to see some sample examples.
+
+Quoting from the C++ Standard ($7.1.5.1/8)
+[..] volatile is a hint to the implementation to avoid aggressive optimization involving the object because the value of the object might be changed by means undetectable by an implementation.[...]
+https://stackoverflow.com/questions/4437527/why-do-we-use-volatile-keyword#comment50302305_4437527
+https://www.geeksforgeeks.org/understanding-volatile-qualifier-c-set-1-introduction/(example memory)
+
+5). Explain  Compiler optimisation.
+-> https://www.geeksforgeeks.org/code-optimization-in-compiler-design/
+https://www.geeksforgeeks.org/loop-optimization-in-compiler-design/
+->https://en.wikipedia.org/wiki/Induction_variable
+
+7).CPU Pipelining 
+	pipelining is overlapping of instructions inside the cpu to increase overall efficiency of the 
+	system which is done via fetching  the next instruction before the current instruction is completed.
+	
+	Instruction pipelining is a technique used in the design of modern microprocessors, microcontrollers and CPUs to increase their instruction throughput (the number of instructions that can be executed in a unit of time).
+-> https://simple.wikipedia.org/wiki/Instruction_pipelining
+Instruction fetch
+Instruction decode and register fetch
+Execute
+Memory access
+Register write back
+
+https://www.geeksforgeeks.org/three-address-code-compiler/
+
+8).Dominator  and Postdominator Tree
+https://nptel.ac.in/courses/106/108/106108113/
+9). Detect a Loop in CFG 
+https://www.geeksforgeeks.org/compiler-design-detection-of-a-loop-in-three-address-code/?ref=lbp(In three address code)
+https://nptel.ac.in/courses/106/108/106108113/
+10). Find a loop in graph 
+https://nptel.ac.in/courses/106/108/106108113/
+
+10.5) How to check live variable
+https://www.geeksforgeeks.org/data-flow-analysis-compiler/?ref=lbp
+
+11). Memory model of a program(c)
+-> https://www.geeksforgeeks.org/memory-layout-of-c-program/
+
+12).How malloc implemented
+->https://stackoverflow.com/questions/3479330/how-is-malloc-implemented-internally
+
+14)data flow analysis ( static code analysis known as data flow analysis)
+https://www.geeksforgeeks.org/data-flow-analysis-compiler/?ref=lbp
+
+15)data dependancy
+-> https://en.wikipedia.org/wiki/Dependence_analysis (take vectorization ppt from lokesh)
+-> https://en.wikipedia.org/wiki/Hazard_(computer_architecture)
+
+17)
+pipeline structure & hazards, 
+https://www.youtube.com/watch?v=srlgaJgaxRE
+https://en.wikipedia.org/wiki/Hazard_(computer_architecture)#Types
+
+How to solve hazard problem ? 
+By giving delay or execute that part in sequencial for structral hazard
+
+cache & memory organization, etc.
+18)
+ARM registers and architecure and calling conventions
+x30-> On an ARM Cortex M series device, the link register (LR or R14) is a core register that stores the return address, such as when making a function call. In the case of an exception, the return address is pushed onto the stack by hardware and the LR is set to EXC_RETURN (0xFFFFFFF1, 0xFFFFFFF9, or 0xFFFFFFFD)
+
+19)
+X86 registers and architecure and calling conventions
+
+19_1)stack pointer and base pointer(frame pointer)
+https://practicalmalwareanalysis.com/2012/04/03/all-about-ebp/
+https://www.cs.rutgers.edu/~pxk/419/notes/frames.html
+-fomit-frame-pointer 
+
+
+20) Reloaction and got(patil ppt) & ELF file format and readelf,objdump command
+->
+
+20_1)prolog and epilog
+https://docs.microsoft.com/en-us/cpp/build/prolog-and-epilog?view=vs-2019
+
+21)Vectorization(c[i:i+3]=a[i:i+3]+b[i:i+3])
+vecctorization SIMD 
+loop undroling SISD
+vectorizn is SIMD, para is MIMD
+https://stackoverflow.com/questions/1422149/what-is-vectorization
+
+22)static and dynamic linking
+https://www.thegeekstuff.com/2012/06/linux-shared-libraries/
+https://www.geeksforgeeks.org/static-vs-dynamic-libraries/
+
+23)Binutiles
+https://www.gnu.org/software/binutils/
+
+24)static analyzer for static analysis
+
+25)OpenCL and OpenGP and OpenGL
+-OpenCV is a computer vision library “focused on real-time image processing.” GL creates images, CV processes them. ... OpenCV is for doing Computer Vision work.
+-the OpenGL is used for graphics programming while the OpenCL is used for heterogeneous computing. ... OpenGL allows writing programs to perform graphics operations while OpenCL allows writing programs for heterogeneous systems that consist of multiple processors.
+
+26)stack frame (rbp and rsp and all)
+https://www.youtube.com/watch?v=PrDsGldP1Q0
+https://www.youtube.com/watch?v=vcfQVwtoyHY
+https://stackoverflow.com/questions/1395591/what-is-exactly-the-base-pointer-and-stack-pointer-to-what-do-they-point
+
+28) LLVM try all command and undertnad
+(diff between global isel and selection dagand fast isel)
+https://llvm.org/docs/CodeGenerator.html
+
+29)virtual table
+https://www.learncpp.com/cpp-tutorial/125-the-virtual-table/
+
+30)How namespace is implenented in c++?
+
+31) RISCV vs CISCV ?
+https://www.elprocus.com/difference-between-risc-and-cisc-architecture/#:~:text=RISC%20architecture%20includes%20the%20design%20of%20instruction%20cache,though%20most%20recent%20designs%20also%20utilize%20split%20caches.
+
+32) Von Neumann and Harvard Architecture
+https://www.geeksforgeeks.org/difference-between-von-neumann-and-harvard-architecture/
+
+33) CPU vs GPU .. ?
+
+Redzone 
+https://softwareengineering.stackexchange.com/questions/230089/what-is-the-purpose-of-red-zone
+
+https://www.learncpp.com/cpp-tutorial/global-constants-and-inline-variables/
+
+https://www.geeksforgeeks.org/last-minute-notes-compiler-design-gq/
+ABI=In computer software, an application binary interface (ABI) is an interface between two binary program modules; often, one of these modules is a library or operating system facility, and the other is a program that is being run by a user.
+
+Symbol Table : It is a data structure being used and maintained by the compiler, consists all the identifier’s name along with their types. It helps the compiler to function smoothly by finding the identifiers quickly.

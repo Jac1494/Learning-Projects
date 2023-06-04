@@ -1,0 +1,93 @@
+bft work:-
+========
+
+We are working on compiler toolchain and c and c++ library(DINKUM)
+
+1) V7LIBC-822:- (objdump --dwarf=decodedline a.out)
+-Debugger issue where for same line it is setting two brank point,we investing in open source.That it's issue with our on debugger(wrdbg)
+
+2)V7LIBC-827:- arm64 dwarf info has many "0" for some C code lines, the WB debugger will show line number as "0" for these lines
+-> Solution   -mllvm -use-unknown-locations=Disable
+
+3)https://jira.wrs.com/browse/V7TST-1635(callee save)
+Save all non-volatile floating registers for ARMV8A in setjmp.s
+https://cs140e.sergio.bz/docs/ARMv8-A-Programmer-Guide.pdf ( V8-V15)
+
+Check D drive folder for all calling conventions.
+
+4)(TCLLVM-232)RISC-V : there is an error when linking an object file which is compiled with -funwind-tables option
+clang --target=riscv64 -march=rv64imafdc -mabi=lp64d -funwind-tables -c -o a.o a.c
+ldriscv -m elf64lriscv --oformat=elf64-littleriscv a.o
+ldriscv: error in a.o(.eh_frame); no .eh_frame_hdr table will be created
+
+  [ 5] .eh_frame         X86_64_UNWIND    0000000000000000  000000b8
+       0000000000000038  0000000000000000   A       0     0     8
+  [ 6] .rela.eh_frame    RELA             0000000000000000  00000150
+       0000000000000018  0000000000000018           8     5     8
+
+Relocation section '.rela.eh_frame' at offset 0x150 contains 1 entry:
+  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+000000000020  000200000002 R_X86_64_PC32     0000000000000000 .text + 0
+
+In x86 this option is available default.
+
+-fexceptions: Enable exception handling. Generates extra code needed to propagate exceptions. For some targets, this implies GCC generates frame unwind information for all functions,
+
+-funwind-tables Similar to -fexceptions, except that it just generates any needed static data, but does not affect the generated code in any other way. You normally do not need to enable this option; instead, a language processor that needs this handling enables it on your behalf.
+
+what is unwind??
+When using languages that support exceptions, such as C++, additional information must be provided to the runtime environment that describes the call frames that much be unwound during the processing of an exception. This information is contained in the special sections .eh_frame and .eh_framehdr.
+
+https://github.com/riscv/riscv-elf-psabi-doc/blob/master/riscv-elf.md
+https://stackoverflow.com/questions/14091231/what-do-the-eh-frame-and-eh-frame-hdr-sections-store-exactly
+http://web.archive.org/web/20130111101034/http://blog.mozilla.org/respindola/2011/05/12/cfi-directives
+http://clang-developers.42468.n3.nabble.com/Unwind-behaviour-in-Clang-LLVM-td4037678.html
+http://dandylife.net/blog/archives/686
+https://rv8.io/isa.html
+https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf
+
+Building with -funwind-tables looks like a workaround, because it forces the compiler to output .eh_frame instead of just .debug_frame. .eh_frame is allocated on the target and is available to the unwinder, but .debug_frame isn't.
+-> Fixed in LLVM-10.
+
+5)(TCLLVM-230) Windows ldpentium.exe program doesn't support long path (>256 bytes) even using relative path 
+https://sourceware.org/bugzilla/show_bug.cgi?id=25713.
+-> (\\\\?\\)
+
+6) pow(-1.0,0.1) did not set errno correctly , sqrt function some of cases are not handle that given support.
+  also some string related function.
+
+7)Fix the issue related FE_INVALID and other exceptions.
+FE_DIVBYZERO	Pole error: division by zero, or some other asymptotically infinite result (from finite arguments).
+FE_INEXACT	Inexact: the result is not exact.
+FE_INVALID	Domain error: At least one of the arguments is a value for which the function is not defined.
+FE_OVERFLOW	Overflow range error: The result is too large in magnitude to be represented as a value of the return type.
+FE_UNDERFLOW	Underflow range error: The result is too small in magnitude to be represented as a value of the return type.
+FE_ALL_EXCEPT	All exceptions (selects all of the exceptions supported by the implementation).
+
+8)(V7LIBC-851)Recently done fputs() failed without fseek() before fgets()/fput()
+
+// Pow , strcpy and strtok and 
+
+
+Close the file.
+
+Check that the final file is
+
+hello
+byegood
+farewell
+
+========================================================================================
+Let's see. CPU have, f.e., 16 registers. If subroutine modifies them, they should be saved before that and restored later. Now, who should do that?
+
+All 16 registers can be saved by caller, or all 16 registers can be saved by callee, or mixed scheme may be used. In this schema, 8 registers is considered as transient - caller don't expect that their contents will be left intact after a call. Thus callers usually use these registers only for temporary data, i.e. computations between calls. But in a few cases when these registers contains non-transient data, caller has to save their contents.
+
+Other registers are considered as permanent, so caller expects that they are left untouched by callee. But in the cases when callee really needs to use more registers, it needs to save/restore their contents.
+
+Why hybrid scheme is advantageous - because usually each procedure needs a few registers for transient data, so by having convention that these registers can be modified by callee, you can reduce calling sequence and therefore make procedure calls a bit faster and more compact.
+
+OTOH, if we consider some registers as "permanent", we can try to avoid using these registers in leaf procedures (i.e. those not calling other procedures) and avoid saving/restoring these registers in leaf procedures. Since cpu usually spends most of time in leaf procedures, this also means quite substantial speed improvement.
+
+So, by splitting registers into two classes, we can make program faster and shorter - leaf subroutines try to not use "permanent" registers and as result don't need to save/restore any. OTOH, other procedures try to don't use "transient" registers to hold values through calls, thus avoiding need to save/restore them.
+
+So, hybrid scheme makes program more efficient compared to any of two pure schemes.

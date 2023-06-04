@@ -1,0 +1,20 @@
+
+
+https://docs.microsoft.com/en-us/cpp/build/arm64-windows-abi-conventions?view=vs-2019
+https://www.arm.com/why-arm/technologies/neon
+
+https://c9x.me/compile/bib/abi-arm64.pdf
+
+https://developer.arm.com/docs/100878/latest/registers
+
+//V8-V15 explanation
+https://developer.arm.com/docs/ihi0055/latest/procedure-call-standard-for-the-arm-64-bit-architecture
+
+https://montcs.bloomu.edu/Presentations/240/20.ARMv8.pdf
+
+
+//922
+
+https://lkml.org/lkml/2012/7/6/558
+
+https://stackoverflow.com/questions/52657678/floating-point-register-corruption-on-arm-cortex-a57-armv8-with-rt-preempt-lin

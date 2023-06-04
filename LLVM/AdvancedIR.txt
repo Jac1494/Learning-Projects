@@ -1,0 +1,13 @@
+Why LLVM IR is importanat ... ?
+- We can able to write target indepenent optinization.
+- It is SSA for so each variable is assigned only once and every new assignent to a variable is a new variable itself. One very visible benifit of this represenataion is that we don't have to do reaching defination analysis , where some variable is assigned a value of another variable.
+- SSA represenataion also helps in no of optimization Like const propogation , dead code elimination and others.
+
+1. getelementptr
+- This instruction is used to get address of the element in an aggregate data structure. It only calaculte the address and does not access the menory
+
+2. Insering a scalar into a vector
+- insertelement
+
+3. Extracting a scalar into a vector
+- extractelement

@@ -1,0 +1,33 @@
+1. What is a binary tree? Implement a binary tree in C++.
+
+2. What is a binary search tree? Implement a binary search tree in C++.
+
+3. What is a self-balancing binary search tree? Name some types of self-balancing binary search trees and explain their differences.
+
+4. What is a trie? How is it useful in searching for words?
+
+5. What is a heap? Explain the difference between a min heap and a max heap.
+
+6. What is an AVL tree? How is it different from a binary search tree?
+
+7. What is a Red-Black tree? How does it maintain balance?
+
+8. What is the difference between a complete binary tree and a full binary tree?
+
+9. How can you find the height of a binary tree? Write a function to find the height of a binary tree in C++.
+
+10. Given a binary tree, how can you find its maximum depth? Write a function to find the maximum depth of a binary tree in C++.
+
+11. Given a binary tree, how can you check if it is balanced? Write a function to check if a binary tree is balanced in C++.
+
+12. What is a binary tree traversal? Explain the difference between inorder, preorder, and postorder traversals.
+
+13. Given a binary tree, how can you perform a level-order traversal? Write a function to perform level-order traversal of a binary tree in C++.
+
+14. What is a segment tree? Explain its use case and implementation.
+
+15. What is a fenwick tree? Explain its use case and implementation.
+
+16. What is a suffix tree? Explain its use case and implementation.
+
+17. What is a B-tree? How is it different from a binary search tree?

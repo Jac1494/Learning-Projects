@@ -1,0 +1,13 @@
+
+To get value of each register allocator:-
+=======================================
+
+./llc test.ll  --regalloc=pbqp -o pbqp.s
+./llc test.ll  --regalloc=greedy -o greddy.s
+./llc test.ll  --regalloc=fast -o fast.s
+./llc test.ll  --regalloc=basic -o basic.s
+./llc test.ll  --regalloc=default -o default.s
+
+For debug:-
+==========
+./llc -debug-only=regalloc test.ll &>11

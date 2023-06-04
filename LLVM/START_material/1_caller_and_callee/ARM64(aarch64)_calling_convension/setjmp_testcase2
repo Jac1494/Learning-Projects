@@ -1,0 +1,59 @@
+#include<stdio.h>
+#include<setjmp.h>
+jmp_buf v;
+
+int sum(int ,int);
+int sub(int ,int);
+int mul(int ,int);
+int div(int ,int);
+
+int main()
+{
+     int error=setjmp(v);
+
+     if(error==3) printf("MULTIPLICATION error\n");
+     if(error==4) printf("DIVISON error\n");
+
+     int n1,n2,s,r;
+     printf("Num1 and num2\n");
+     scanf("%d%d",&n1,&n2);
+
+     printf("Select operation sum,sub,mul,div\n");
+     scanf("%d",&s);
+
+     switch(s){
+
+     case 1:r=sum(n1,n2);
+    break;
+
+     case 2:r=sub(n1,n2);
+            break;
+
+     case 3:r=mul(n1,n2);
+            break;
+
+     case 4:r=div(n1,n2);
+            break;
+     }
+     printf("output =%d\n",r);
+}
+
+int sum(int x,int y)
+{
+return x+y;
+}
+int sub(int x,int y)
+{
+return x-y;
+}
+int mul(int x,int y)
+{
+        if(!(x&&y))
+longjmp(v,3);
+return x*y;
+}
+int div(int x,int y)
+{
+longjmp(v,4);
+return x/y;
+}

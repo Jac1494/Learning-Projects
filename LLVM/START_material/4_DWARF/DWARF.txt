@@ -1,0 +1,81 @@
+https://www.facebook.com/notes/c-c-c-vbnet/dwarf-debugging-data-format/1179415802105143/
+
+https://developer.ibm.com/technologies/systems/articles/au-dwarf-debug-format/
+
+https://wiki.osdev.org/DWARF
+
+https://undo.io/resources/gdb-watchpoint/under-the-hood-of-Linux-cplusplus-debugging-tools/
+
+https://totalview.io/sites/totalview/files/pdfs/white-paper-totalview-saving-time-space-split-dwarf.pdf
+
+
+#include<stdio.h>
+int g_var=33;
+static int s_var=55;
+void foo(int x){
+       static int z=44;
+        int y=22;
+        printf("%d\n",x+y+z+g_var+s_var);
+}
+int main(){
+        foo(11);
+}
+================================================
+0x000002ff:   DW_TAG_variable
+                DW_AT_name      ("g_var")
+                DW_AT_decl_file ("/folk/scratch1/Jaydeep/wr-llvm/install/LINUX64/bin/check.c")
+                DW_AT_decl_line (2)
+                DW_AT_type      (0x00000062 "int")
+                DW_AT_external  (true)
+                DW_AT_location  (DW_OP_addr 0x201010)
+
+0x00000314:   DW_TAG_variable
+                DW_AT_name      ("s_var")
+                DW_AT_decl_file ("/folk/scratch1/Jaydeep/wr-llvm/install/LINUX64/bin/check.c")
+                DW_AT_decl_line (3)
+                DW_AT_type      (0x00000062 "int")
+                DW_AT_location  (DW_OP_addr 0x201014)
+
+0x00000329:   DW_TAG_subprogram
+                DW_AT_external  (true)
+                DW_AT_name      ("main")
+                DW_AT_decl_file ("/folk/scratch1/Jaydeep/wr-llvm/install/LINUX64/bin/check.c")
+                DW_AT_decl_line (9)
+                DW_AT_type      (0x00000062 "int")
+                DW_AT_low_pc    (0x0000000000000692)
+                DW_AT_high_pc   (0x00000000000006a7)
+                DW_AT_frame_base        (DW_OP_call_frame_cfa)
+                DW_AT_GNU_all_tail_call_sites   (true)
+
+0x00000346:   DW_TAG_subprogram
+                DW_AT_external  (true)
+                DW_AT_name      ("foo")
+                DW_AT_decl_file ("/folk/scratch1/Jaydeep/wr-llvm/install/LINUX64/bin/check.c")
+                DW_AT_decl_line (4)
+                DW_AT_prototyped        (true)
+                DW_AT_low_pc    (0x000000000000064a)
+                DW_AT_high_pc   (0x0000000000000692)
+                DW_AT_frame_base        (DW_OP_call_frame_cfa)
+                DW_AT_GNU_all_tail_call_sites   (true)
+
+0x0000035f:     DW_TAG_formal_parameter
+                  DW_AT_name    ("x")
+                  DW_AT_decl_file       ("/folk/scratch1/Jaydeep/wr-llvm/install/LINUX64/bin/check.c")
+                  DW_AT_decl_line       (4)
+                  DW_AT_type    (0x00000062 "int")
+                  DW_AT_location        (DW_OP_fbreg -36)
+
+0x0000036b:     DW_TAG_variable
+                  DW_AT_name    ("z")
+                  DW_AT_decl_file       ("/folk/scratch1/Jaydeep/wr-llvm/install/LINUX64/bin/check.c")
+                  DW_AT_decl_line       (5)
+                  DW_AT_type    (0x00000062 "int")
+                  DW_AT_location        (DW_OP_addr 0x201018)
+
+0x0000037e:     DW_TAG_variable
+                  DW_AT_name    ("y")
+                  DW_AT_decl_file       ("/folk/scratch1/Jaydeep/wr-llvm/install/LINUX64/bin/check.c")
+                  DW_AT_decl_line       (6)
+                  DW_AT_type    (0x00000062 "int")
+                  DW_AT_location        (DW_OP_fbreg -20)
+
